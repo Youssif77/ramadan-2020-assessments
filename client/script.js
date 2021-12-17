@@ -1,7 +1,6 @@
-"use strict";
+("use strict");
 
-import moment from "moment";
-
+import moment from "./node_modules/moment/dist/moment.js";
 console.log("Start Program Holla!");
 
 const formInputs = document.querySelectorAll(".form-control");
