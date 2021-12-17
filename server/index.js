@@ -20,8 +20,6 @@ app.get("/", (req, res) =>
 );
 
 app.post("/video-request", async (req, res, next) => {
-  console.log(req.body);
-  console.log(req.headers);
   const response = await VideoRequestData.createRequest(req.body);
   res.send(response);
   next();
