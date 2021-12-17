@@ -14,15 +14,17 @@ requestBtn.addEventListener("click", (e) => {
 });
 
 const sendRequest = async (enteredData) => {
-  await fetch("http://localhost:7777/video-request", {
+  const res = await fetch("http://localhost:7777/video-request", {
     method: "POST",
     body: JSON.stringify(enteredData),
-    header: { "Content-Type": "application/json" },
+    headers: { "Content-Type": " application/json" },
   });
+  const data = await res.json();
+  console.log(data);
 };
 const getRequests = async () => {
   const res = await fetch("http://localhost:7777/video-request");
   const data = await res.json();
-  console.log(data);
+  // console.log(data);
 };
 getRequests();
