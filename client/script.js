@@ -1,4 +1,7 @@
 "use strict";
+
+const moment = require("moment");
+
 console.log("Start Program Holla!");
 
 const formInputs = document.querySelectorAll(".form-control");
@@ -60,7 +63,9 @@ const renderRequests = (data) => {
             &bullet; added by
             <strong>${item.author_name}</strong>
             on
-            <strong>Sat Apr 11 2020</strong>
+            <strong>${moment(item.submit_date).format(
+              "ddd MMM M y"
+            )}Sat Apr 11 2020</strong>
           </div>
           <div class='d-flex justify-content-center flex-column 408ml-auto mr-2'>
             <div class='badge badge-success'>Beginners</div>
