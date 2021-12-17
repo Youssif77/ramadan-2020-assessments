@@ -1,14 +1,14 @@
 "use strict";
 
-const moment = require("moment");
+import moment from "moment";
 
 console.log("Start Program Holla!");
 
 const formInputs = document.querySelectorAll(".form-control");
 const requestBtn = document.querySelector("#request-btn");
 const requestsContainer = document.querySelector("#listOfRequests");
-window.onload = function () {
-  const requests = getRequests();
+window.onload = async function () {
+  const requests = await getRequests();
   renderRequests(requests);
 };
 
@@ -35,11 +35,12 @@ const sendRequest = async (enteredData) => {
 const getRequests = async () => {
   const res = await fetch("http://localhost:7777/video-request");
   const data = await res.json();
-  console.log(data);
+  // console.log(data);
   return data;
 };
 
 const renderRequests = (data) => {
+  console.log(data);
   data.forEach((item) => {
     `      <div class='card mb-3'>
         <div class='card-body d-flex justify-content-between flex-row'>
@@ -63,9 +64,7 @@ const renderRequests = (data) => {
             &bullet; added by
             <strong>${item.author_name}</strong>
             on
-            <strong>${moment(item.submit_date).format(
-              "ddd MMM M y"
-            )}Sat Apr 11 2020</strong>
+            <strong>${moment(item.submit_date).format("ddd MMM M y")}</strong>
           </div>
           <div class='d-flex justify-content-center flex-column 408ml-auto mr-2'>
             <div class='badge badge-success'>Beginners</div>
