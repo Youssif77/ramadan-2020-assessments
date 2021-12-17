@@ -1,5 +1,5 @@
 "use strict";
-console.log("holla");
+console.log("Start Program Holla!");
 
 const formInputs = document.querySelectorAll(".form-control");
 const requestBtn = document.querySelector("#request-btn");
@@ -26,13 +26,16 @@ const sendRequest = async (enteredData) => {
   });
   const data = await res.json();
   console.log(data);
+  // TODO: bind the dom
 };
+
 const getRequests = async () => {
   const res = await fetch("http://localhost:7777/video-request");
   const data = await res.json();
   console.log(data);
   return data;
 };
+
 const renderRequests = (data) => {
   data.forEach((item) => {
     `      <div class='card mb-3'>
@@ -65,8 +68,4 @@ const renderRequests = (data) => {
         </div>
       </div>`;
   });
-};
-const transformDate = (date) => {
-  const modeffiedDate = new Date(date);
-  return `${modeffiedDate} `;
 };
