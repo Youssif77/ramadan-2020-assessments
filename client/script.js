@@ -40,9 +40,10 @@ const getRequests = async () => {
 const renderRequests = (data, newRequest = false) => {
   let template = "";
   data.forEach((item) => {
+    // console.log(item._id);
     template =
       template +
-      `      <div class='card mb-3'>
+      `      <div class='card mb-3' data-id =${item._id}>
         <div class='card-body d-flex justify-content-between flex-row'>
           <div class='d-flex flex-column'>
             <h3>${item.topic_title}</h3>
@@ -54,9 +55,9 @@ const renderRequests = (data, newRequest = false) => {
           </div>`
           }
           <div class='d-flex flex-column text-center'>
-            <a class='btn btn-link'>🔺</a>
+            <a class='btn btn-link vote_up'>🔺</a>
             <h3>0</h3>
-            <a class='btn btn-link'>🔻</a>
+            <a class='btn btn-link vote_down'>🔻</a>
           </div>
         </div>
         <div class='card-footer d-flex flex-row justify-content-between'>
@@ -78,4 +79,7 @@ const renderRequests = (data, newRequest = false) => {
   } else {
     requestsContainer.innerHTML = template + requestsContainer.innerHTML;
   }
+};
+const voteHandler = () => {
+  let;
 };
