@@ -11,13 +11,14 @@ window.onload = async function () {
   renderRequests(requests);
 };
 
-requestBtn.addEventListener("click", (e) => {
+requestBtn.addEventListener("click", async (e) => {
   e.preventDefault();
   const inputsObj = {};
   formInputs.forEach((formInput) => {
     inputsObj[formInput.name] = formInput.value;
   });
-  sendRequest(inputsObj);
+  const request = await sendRequest(inputsObj);
+  renderRequests(request, true);
 });
 
 const sendRequest = async (enteredData) => {
@@ -27,21 +28,17 @@ const sendRequest = async (enteredData) => {
     headers: { "Content-Type": " application/json" },
   });
   const data = await res.json();
-  console.log(data);
-  // TODO: bind the dom
+  return [data];
 };
 
 const getRequests = async () => {
   const res = await fetch("http://localhost:7777/video-request");
   const data = await res.json();
-  // console.log(data);
   return data;
 };
 
-const renderRequests = (data) => {
-  console.log(data);
+const renderRequests = (data, newRequest = false) => {
   let template = "";
-
   data.forEach((item) => {
     template =
       template +
@@ -51,8 +48,11 @@ const renderRequests = (data) => {
             <h3>${item.topic_title}</h3>
             <p class='text-muted mb-2'>${item.topic_details}</p>
             <p class='mb-0 text-muted'>
-              <strong>Expected results:</strong>${item.expected_result} </p>
-          </div>
+          ${
+            item.expected_result &&
+            `<strong>Expected results:</strong>${item.expected_result} </p>
+          </div>`
+          }
           <div class='d-flex flex-column text-center'>
             <a class='btn btn-link'>🔺</a>
             <h3>0</h3>
@@ -73,5 +73,9 @@ const renderRequests = (data) => {
         </div>
       </div>`;
   });
-  requestsContainer.innerHTML = template;
+  if (!newRequest) {
+    requestsContainer.innerHTML = template;
+  } else {
+    requestsContainer.innerHTML = template + requestsContainer.innerHTML;
+  }
 };
