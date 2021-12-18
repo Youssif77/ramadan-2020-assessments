@@ -1,4 +1,4 @@
-("use strict");
+"use strict";
 
 import moment from "./node_modules/moment/dist/moment.js";
 console.log("Start Program Holla!");
@@ -6,6 +6,7 @@ console.log("Start Program Holla!");
 const formInputs = document.querySelectorAll(".form-control");
 const requestBtn = document.querySelector("#request-btn");
 const requestsContainer = document.querySelector("#listOfRequests");
+
 window.onload = async function () {
   const requests = await getRequests();
   renderRequests(requests);
@@ -40,10 +41,7 @@ const getRequests = async () => {
 const renderRequests = (data, newRequest = false) => {
   let template = "";
   data.forEach((item) => {
-    // console.log(item._id);
-    template =
-      template +
-      `      <div class='card mb-3' data-id =${item._id}>
+    template += `<div class='card mb-3' data-id=${item._id}>
         <div class='card-body d-flex justify-content-between flex-row'>
           <div class='d-flex flex-column'>
             <h3>${item.topic_title}</h3>
@@ -55,9 +53,9 @@ const renderRequests = (data, newRequest = false) => {
           </div>`
           }
           <div class='d-flex flex-column text-center'>
-            <a class='btn btn-link vote_up'>🔺</a>
+            <a class='btn btn-link vote_up' data-voteType="ups">🔺</a>
             <h3>0</h3>
-            <a class='btn btn-link vote_down'>🔻</a>
+            <a class='btn btn-link vote_down' data-voteType="downs">🔻</a>
           </div>
         </div>
         <div class='card-footer d-flex flex-row justify-content-between'>
@@ -69,7 +67,7 @@ const renderRequests = (data, newRequest = false) => {
             <strong>${moment(item.submit_date).format("ddd MMM M y")}</strong>
           </div>
           <div class='d-flex justify-content-center flex-column 408ml-auto mr-2'>
-            <div class='badge badge-success'>Beginners</div>
+            <div class='badge badge-success'>${item.target_level}</div>
           </div>
         </div>
       </div>`;
@@ -79,7 +77,18 @@ const renderRequests = (data, newRequest = false) => {
   } else {
     requestsContainer.innerHTML = template + requestsContainer.innerHTML;
   }
+  const listOfRequests = document.querySelectorAll("#listOfRequests > div");
+  voteHandler(listOfRequests);
 };
-const voteHandler = () => {
-  let;
+
+const voteHandler = (requestsElms) => {
+  requestsElms.forEach((requestElm) => {
+    requestElm.removeEventListener("click", addVoteHandler);
+    requestElm.addEventListener("click", addVoteHandler);
+  });
+};
+
+const addVoteHandler = (e) => {
+  if (!e.target.dataset.votetype) return;
+  console.log(e.target.dataset.votetype);
 };
