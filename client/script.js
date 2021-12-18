@@ -90,16 +90,18 @@ const voteHandler = (requestsElms) => {
   });
 };
 
-const addVoteHandler = (e) => {
+const addVoteHandler = async (e) => {
   if (!e.target.dataset.votetype) return;
-  let requestElem = e.target.closest(".request");
-  console.log(requestElem.dataset.id);
-  const updatedVoteData = updateVote(
+  const requestElem = e.target.closest(".request");
+  const updatedVoteData = await updateVote(
     requestElem.dataset.id,
     e.target.dataset.votetype
   );
-  // const voteNumber=document.querySelector(" .vote")
+  const voteHeading = requestElem.querySelector(".vote");
+  voteHeading.innerHTML =
+    updatedVoteData.votes.ups - updatedVoteData.votes.downs;
 };
+
 const updateVote = async (id, vote_type) => {
   const res = await fetch("http://localhost:7777/video-request/vote", {
     method: "PUT",
