@@ -41,7 +41,7 @@ const getRequests = async () => {
 const renderRequests = (data, newRequest = false) => {
   let template = "";
   data.forEach((item) => {
-    template += `<div class='card mb-3' data-id=${item._id}>
+    template += `<div class='card mb-3 request' data-id=${item._id}>
         <div class='card-body d-flex justify-content-between flex-row'>
           <div class='d-flex flex-column'>
             <h3>${item.topic_title}</h3>
@@ -54,7 +54,9 @@ const renderRequests = (data, newRequest = false) => {
           }
           <div class='d-flex flex-column text-center'>
             <a class='btn btn-link vote_up' data-voteType="ups">🔺</a>
-            <h3>0</h3>
+            <h3>
+               ${item.votes.ups - item.votes.downs}
+                         </h3>
             <a class='btn btn-link vote_down' data-voteType="downs">🔻</a>
           </div>
         </div>
@@ -90,5 +92,19 @@ const voteHandler = (requestsElms) => {
 
 const addVoteHandler = (e) => {
   if (!e.target.dataset.votetype) return;
-  console.log(e.target.dataset.votetype);
+  let requestElem = e.target.closest(".request");
+  console.log(requestElem.dataset.id);
+  updateVote(requestElem.dataset.id, e.target.dataset.votetype);
+};
+const updateVote = async (id, vote_type) => {
+  const res = await fetch("http://localhost:7777/video-request/vote", {
+    method: "PUT",
+    body: JSON.stringify({
+      id,
+      vote_type,
+    }),
+    headers: { "Content-Type": " application/json" },
+  });
+  const data = await res.json();
+  // console.log(data);
 };
