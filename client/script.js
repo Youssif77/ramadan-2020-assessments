@@ -40,16 +40,18 @@ const getRequests = async () => {
 
 const renderRequests = (data) => {
   console.log(data);
+  let template = "";
+
   data.forEach((item) => {
-    `      <div class='card mb-3'>
+    template =
+      template +
+      `      <div class='card mb-3'>
         <div class='card-body d-flex justify-content-between flex-row'>
           <div class='d-flex flex-column'>
             <h3>${item.topic_title}</h3>
             <p class='text-muted mb-2'>${item.topic_details}</p>
             <p class='mb-0 text-muted'>
-              <strong>${item.expected_result}:</strong>
-              Dummy expected result text
-            </p>
+              <strong>Expected results:</strong>${item.expected_result} </p>
           </div>
           <div class='d-flex flex-column text-center'>
             <a class='btn btn-link'>🔺</a>
@@ -71,4 +73,5 @@ const renderRequests = (data) => {
         </div>
       </div>`;
   });
+  requestsContainer.innerHTML = template;
 };
