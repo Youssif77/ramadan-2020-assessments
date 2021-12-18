@@ -54,7 +54,7 @@ const renderRequests = (data, newRequest = false) => {
           }
           <div class='d-flex flex-column text-center'>
             <a class='btn btn-link vote_up' data-voteType="ups">🔺</a>
-            <h3>
+            <h3 class="vote">
                ${item.votes.ups - item.votes.downs}
                          </h3>
             <a class='btn btn-link vote_down' data-voteType="downs">🔻</a>
@@ -94,7 +94,11 @@ const addVoteHandler = (e) => {
   if (!e.target.dataset.votetype) return;
   let requestElem = e.target.closest(".request");
   console.log(requestElem.dataset.id);
-  updateVote(requestElem.dataset.id, e.target.dataset.votetype);
+  const updatedVoteData = updateVote(
+    requestElem.dataset.id,
+    e.target.dataset.votetype
+  );
+  // const voteNumber=document.querySelector(" .vote")
 };
 const updateVote = async (id, vote_type) => {
   const res = await fetch("http://localhost:7777/video-request/vote", {
@@ -106,5 +110,5 @@ const updateVote = async (id, vote_type) => {
     headers: { "Content-Type": " application/json" },
   });
   const data = await res.json();
-  // console.log(data);
+  return data;
 };
