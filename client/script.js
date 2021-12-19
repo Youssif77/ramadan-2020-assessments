@@ -2,13 +2,30 @@
 
 import moment from "./node_modules/moment/dist/moment.js";
 console.log("Start Program Holla!");
-
+let requestsArray = [];
 const formInputs = document.querySelectorAll(".form-control");
 const requestBtn = document.querySelector("#request-btn");
 const requestsContainer = document.querySelector("#listOfRequests");
+const orderedBy = document.querySelector("#ordered_by");
+const searchInput = document.querySelector(".search");
+const search = (e) => {
+  let searchArray = requestsArray.filter((request) => {
+    if (request.topic_title.startsWith(e.target.value)) {
+      return request;
+    }
+  });
+  if (searchArray) {
+    renderRequests(searchArray);
+  }
+  // if (!searchArray ) {
+  //   requestsContainer.innerHTML = `<p class="text-danger">no requsts matchs<p/>`;
+  // }
+};
+searchInput.addEventListener("input", search);
 
 window.onload = async function () {
   const requests = await getRequests();
+
   renderRequests(requests);
 };
 
@@ -29,13 +46,15 @@ const sendRequest = async (enteredData) => {
     headers: { "Content-Type": " application/json" },
   });
   const data = await res.json();
-  return [data];
+  requestsArray.unshift(data);
+  return [requestsArray[0]];
 };
 
 const getRequests = async () => {
   const res = await fetch("http://localhost:7777/video-request");
   const data = await res.json();
-  return data;
+  requestsArray = data;
+  return requestsArray;
 };
 
 const renderRequests = (data, newRequest = false) => {
@@ -97,6 +116,12 @@ const addVoteHandler = async (e) => {
     requestElem.dataset.id,
     e.target.dataset.votetype
   );
+  const updatedRequest = requestsArray.find((element) => {
+    return element._id === requestElem.dataset.id;
+  });
+  updatedRequest.votes.ups = updatedVoteData.votes.ups;
+  updatedRequest.votes.downs = updatedVoteData.votes.downs;
+
   const voteHeading = requestElem.querySelector(".vote");
   voteHeading.innerHTML =
     updatedVoteData.votes.ups - updatedVoteData.votes.downs;
@@ -114,3 +139,15 @@ const updateVote = async (id, vote_type) => {
   const data = await res.json();
   return data;
 };
+const requestsOrder = (e) => {
+  if (e.target.value === "newest") {
+    renderRequests(requestsArray);
+  } else if (e.target.value === "most_voted") {
+    let requestsCopy = JSON.parse(JSON.stringify(requestsArray));
+    requestsCopy.sort((b, a) => {
+      return a.votes.ups - a.votes.downs - (b.votes.ups - b.votes.downs);
+    });
+    renderRequests(requestsCopy);
+  }
+};
+orderedBy.addEventListener("change", requestsOrder);

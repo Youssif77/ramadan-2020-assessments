@@ -93,6 +93,12 @@
       </div>
       <hr />
       <h1 class="mb-4">List of requested videos</h1>
+      <label for="ordered_by">order requests by:</label>
+      <select id="ordered_by" class="bg-dark text-light rounded p-1">
+        <option value="newest">the newest</option>
+        <option value="most_voted">most voted</option>
+      </select>
+      <input type="text" placeholder="search" class="rounded search" />
       <div id="listOfRequests">
         <!-- <div class="card mb-3">
           <div class="card-body d-flex justify-content-between flex-row">
