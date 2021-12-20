@@ -10,23 +10,22 @@ const orderedBy = document.querySelector("#ordered_by");
 const searchInput = document.querySelector(".search");
 const search = (e) => {
   let searchArray = requestsArray.filter((request) => {
-    if (request.topic_title.startsWith(e.target.value)) {
+    if (request.topic_title.includes(e.target.value)) {
       return request;
     }
   });
-  if (searchArray) {
-    renderRequests(searchArray);
+  if (!searchArray.length) {
+    requestsContainer.innerHTML = `<p class="text-danger">no requsts matchs<p/>`;
+    return;
   }
-  // if (!searchArray ) {
-  //   requestsContainer.innerHTML = `<p class="text-danger">no requsts matchs<p/>`;
-  // }
+  renderRequests(searchArray);
 };
 searchInput.addEventListener("input", search);
 
 window.onload = async function () {
-  const requests = await getRequests();
+  await getRequests();
 
-  renderRequests(requests);
+  renderRequests(requestsArray);
 };
 
 requestBtn.addEventListener("click", async (e) => {
@@ -35,8 +34,9 @@ requestBtn.addEventListener("click", async (e) => {
   formInputs.forEach((formInput) => {
     inputsObj[formInput.name] = formInput.value;
   });
-  const request = await sendRequest(inputsObj);
-  renderRequests(request, true);
+  await sendRequest(inputsObj);
+
+  orderRequests();
 });
 
 const sendRequest = async (enteredData) => {
@@ -47,7 +47,6 @@ const sendRequest = async (enteredData) => {
   });
   const data = await res.json();
   requestsArray.unshift(data);
-  return [requestsArray[0]];
 };
 
 const getRequests = async () => {
@@ -57,7 +56,7 @@ const getRequests = async () => {
   return requestsArray;
 };
 
-const renderRequests = (data, newRequest = false) => {
+const renderRequests = (data) => {
   let template = "";
   data.forEach((item) => {
     template += `<div class='card mb-3 request' data-id=${item._id}>
@@ -93,11 +92,9 @@ const renderRequests = (data, newRequest = false) => {
         </div>
       </div>`;
   });
-  if (!newRequest) {
-    requestsContainer.innerHTML = template;
-  } else {
-    requestsContainer.innerHTML = template + requestsContainer.innerHTML;
-  }
+
+  requestsContainer.innerHTML = template;
+
   const listOfRequests = document.querySelectorAll("#listOfRequests > div");
   voteHandler(listOfRequests);
 };
@@ -122,9 +119,7 @@ const addVoteHandler = async (e) => {
   updatedRequest.votes.ups = updatedVoteData.votes.ups;
   updatedRequest.votes.downs = updatedVoteData.votes.downs;
 
-  const voteHeading = requestElem.querySelector(".vote");
-  voteHeading.innerHTML =
-    updatedVoteData.votes.ups - updatedVoteData.votes.downs;
+  orderRequests();
 };
 
 const updateVote = async (id, vote_type) => {
@@ -139,15 +134,20 @@ const updateVote = async (id, vote_type) => {
   const data = await res.json();
   return data;
 };
-const requestsOrder = (e) => {
-  if (e.target.value === "newest") {
+const orderRequests = () => {
+  if (orderedBy.value === "newest") {
+    requestsArray.sort((b, a) => {
+      return diffInTime(a.submit_date, b.submit_date);
+    });
     renderRequests(requestsArray);
-  } else if (e.target.value === "most_voted") {
-    let requestsCopy = JSON.parse(JSON.stringify(requestsArray));
-    requestsCopy.sort((b, a) => {
+  } else if (orderedBy.value === "most_voted") {
+    requestsArray.sort((b, a) => {
       return a.votes.ups - a.votes.downs - (b.votes.ups - b.votes.downs);
     });
-    renderRequests(requestsCopy);
+    renderRequests(requestsArray);
   }
 };
-orderedBy.addEventListener("change", requestsOrder);
+orderedBy.addEventListener("change", orderRequests);
+const diffInTime = (firstDate, secondDate) => {
+  return new Date(firstDate) - new Date(secondDate);
+};
