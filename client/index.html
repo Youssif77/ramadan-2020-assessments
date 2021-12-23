@@ -18,21 +18,25 @@
               <div class="form-group">
                 <label for="author_name">Your name *</label>
                 <input
+                  required
                   class="form-control"
                   name="author_name"
                   placeholder="Write your name here"
                 />
+                <p class="text-danger mt-2 fw-bold"></p>
               </div>
             </div>
             <div class="col-md">
               <div class="form-group">
                 <label for="author_email">Your email *</label>
                 <input
+                  required
                   class="form-control"
                   name="author_email"
                   placeholder="Write your email here"
                   type="email"
                 />
+                <p class="text-danger mt-2 fw-bold"></p>
               </div>
             </div>
           </div>
@@ -42,10 +46,13 @@
               <div class="form-group">
                 <label for="topic_title">Topic *</label>
                 <input
+                  maxlength="100"
+                  required
                   class="form-control"
                   name="topic_title"
                   placeholder="Write your suggested topic here"
                 />
+                <p class="text-danger mt-2 fw-bold"></p>
               </div>
             </div>
             <div class="col-md">
@@ -68,10 +75,12 @@
               <div class="form-group">
                 <label for="topic_details">More details *</label>
                 <textarea
+                  required
                   class="form-control"
                   name="topic_details"
                   placeholder="Write your topic in more details here"
                 ></textarea>
+                <p class="text-danger mt-2 fw-bold"></p>
               </div>
             </div>
             <div class="col-md">
@@ -98,7 +107,7 @@
         <option value="newest">the newest</option>
         <option value="most_voted">most voted</option>
       </select>
-      <input type="text" placeholder="search" class="rounded search" />
+      <input type="search" placeholder="search" class="rounded search" />
       <div id="listOfRequests">
         <!-- <div class="card mb-3">
           <div class="card-body d-flex justify-content-between flex-row">

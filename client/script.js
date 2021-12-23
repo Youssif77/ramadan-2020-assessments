@@ -28,16 +28,61 @@ window.onload = async function () {
   renderRequests(requestsArray);
 };
 
+let isValide = false;
+
 requestBtn.addEventListener("click", async (e) => {
   e.preventDefault();
   const inputsObj = {};
+
   formInputs.forEach((formInput) => {
     inputsObj[formInput.name] = formInput.value;
-  });
-  await sendRequest(inputsObj);
 
-  orderRequests();
+    if (!formInput.checkValidity()) {
+      validateInput.call(formInput);
+    }
+  });
+
+  if (isValide) {
+    await sendRequest(inputsObj);
+    orderRequests();
+  }
 });
+
+function validateInput() {
+  const inputContainer = this.closest(".form-group");
+  if (this.required && !this.checkValidity()) {
+    renderErrorMsg(inputContainer, `this feild is required`);
+    isValide = false;
+    if (this.type === "email" && !this.checkValidity() && this.value) {
+      renderErrorMsg(inputContainer, `this email not valid`);
+      isValide = false;
+    }
+    if (this.name == "topic_title" && this.value.length == 100) {
+      renderErrorMsg(inputContainer, `maximum length is 100 char`);
+      isValide = false;
+    }
+    return;
+  } else {
+    renderErrorMsg(inputContainer, ``);
+
+    isValide = true;
+  }
+}
+
+formInputs.forEach((formInput) => {
+  formInput.addEventListener("input", validateInput);
+});
+
+const renderErrorMsg = (inputContainer, msg) => {
+  // let template = ` <p class='text-danger mt-2 fw-bold'>${msg}</p>`;
+  inputContainer.lastElementChild.innerHTML = msg;
+  // inputContainer.insertAdjacentHTML("beforeEnd", template);
+};
+
+function validateEmail(email) {
+  var re = /\S+@\S+\.\S+/;
+  return re.test(email);
+}
 
 const sendRequest = async (enteredData) => {
   const res = await fetch("http://localhost:7777/video-request", {
@@ -147,6 +192,7 @@ const orderRequests = () => {
     renderRequests(requestsArray);
   }
 };
+
 orderedBy.addEventListener("change", orderRequests);
 const diffInTime = (firstDate, secondDate) => {
   return new Date(firstDate) - new Date(secondDate);
