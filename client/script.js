@@ -8,9 +8,8 @@ const requestBtn = document.querySelector("#request-btn");
 const requestsContainer = document.querySelector("#listOfRequests");
 const orderedBy = document.querySelector("#ordered_by");
 const searchInput = document.querySelector(".search");
-let searchArray = [];
 const search = (e) => {
-  searchArray = requestsArray.filter((request) => {
+  let searchArray = requestsArray.filter((request) => {
     if (request.topic_title.includes(e.target.value)) {
       return request;
     }
@@ -180,23 +179,18 @@ const updateVote = async (id, vote_type) => {
   const data = await res.json();
   return data;
 };
+
 const orderRequests = () => {
-  let sortedRequests;
-  if (searchInput.value) {
-    sortedRequests = searchArray;
-  } else {
-    sortedRequests = requestsArray;
-  }
   if (orderedBy.value === "newest") {
-    sortedRequests.sort((b, a) => {
+    requestsArray.sort((b, a) => {
       return diffInTime(a.submit_date, b.submit_date);
     });
-    renderRequests(sortedRequests);
+    renderRequests(requestsArray);
   } else if (orderedBy.value === "most_voted") {
-    sortedRequests.sort((b, a) => {
+    requestsArray.sort((b, a) => {
       return a.votes.ups - a.votes.downs - (b.votes.ups - b.votes.downs);
     });
-    renderRequests(sortedRequests);
+    renderRequests(requestsArray);
   }
 };
 
