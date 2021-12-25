@@ -2,12 +2,14 @@
 
 import moment from "./node_modules/moment/dist/moment.js";
 console.log("Start Program Holla!");
+
 let requestsArray = [];
 const formInputs = document.querySelectorAll(".form-control");
 const requestBtn = document.querySelector("#request-btn");
 const requestsContainer = document.querySelector("#listOfRequests");
 const orderedBy = document.querySelector("#ordered_by");
 const searchInput = document.querySelector(".search");
+
 const search = (e) => {
   let searchArray = requestsArray.filter((request) => {
     if (request.topic_title.includes(e.target.value)) {

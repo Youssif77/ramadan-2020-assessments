@@ -20,7 +20,6 @@ export const state = {
 export const loadRequests = async () => {
   try {
     const data = await getJson(`${API_URL}/video-request`);
-    console.log(data);
     state.requsets = data;
   } catch (err) {
     console.error(`${err} 💥💥💥💥`);
@@ -28,14 +27,15 @@ export const loadRequests = async () => {
 };
 
 export const updateVote = async (id, vote_type) => {
-  const updatedRequest = await getJson(`${API_URL}/video-request/vote`, {
-    method: "PUT",
-    body: JSON.stringify({
+  const updatedRequest = await getJson(
+    `${API_URL}/video-request/vote`,
+    "PUT",
+    JSON.stringify({
       id,
       vote_type,
     }),
-    headers: { "Content-Type": " application/json" },
-  });
+    { "Content-Type": " application/json" }
+  );
 
   const oldRequest = state.requsets.find((requset) => {
     return requset._id === updatedRequest._id;
@@ -46,10 +46,11 @@ export const updateVote = async (id, vote_type) => {
 };
 
 export const sendRequest = async (enteredData) => {
-  const newRequest = await getJson(`${API_URL}/video-request`, {
-    method: "POST",
-    body: JSON.stringify(enteredData),
-    headers: { "Content-Type": " application/json" },
-  });
+  const newRequest = await getJson(
+    `${API_URL}/video-request`,
+    "POST",
+    JSON.stringify(enteredData),
+    { "Content-Type": " application/json" }
+  );
   state.requsets.unshift(newRequest);
 };

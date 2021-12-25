@@ -7,6 +7,19 @@ class requsetsView {
     document.addEventListener("DOMContentLoaded", handler);
   }
 
+  addHandlerUpdateVote(handler) {
+    const listOfRequests = document.querySelector("#listOfRequests");
+    listOfRequests.addEventListener("click", function TODO(e) {
+      if (!e.target.dataset.votetype) return;
+
+      const requestElem = e.target.closest(".request");
+
+      const id = requestElem.dataset.id;
+      const voteType = e.target.dataset.votetype;
+      handler(id, voteType);
+    });
+  }
+
   renderRequests(data) {
     let template = "";
     data.forEach((item) => {
@@ -45,27 +58,6 @@ class requsetsView {
     });
 
     this.requestsContainer.innerHTML = template;
-
-    const listOfRequests = document.querySelectorAll("#listOfRequests > div");
-    this.voteHandler(listOfRequests);
-  }
-
-  voteHandler(requestsElms) {
-    requestsElms.forEach((requestElm) => {
-      requestElm.removeEventListener("click", this.addVoteHandler);
-      requestElm.addEventListener("click", this.addVoteHandler);
-    });
-  }
-
-  addVoteHandler(e) {
-    // Select vote buttons only
-    if (!e.target.dataset.votetype) return;
-
-    const requestElem = e.target.closest(".request");
-    return {
-      id: requestElem.dataset.id,
-      voteType: e.target.dataset.votetype,
-    };
   }
 }
 

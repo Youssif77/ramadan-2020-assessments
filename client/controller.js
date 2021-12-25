@@ -3,19 +3,29 @@
 import * as model from "./model.js";
 import requestsView from "./views/requestsView.js";
 
-const controlNewRequest = async () => {
+async function controlLoadRequests() {
+  await model.loadRequests();
+  requestsView.renderRequests(model.state.requsets);
+}
+
+async function controlUpdateVote(id, voteType) {
+  await model.updateVote(id, voteType);
+
+  // render updated vote requests
+  requestsView.renderRequests(model.state.requsets);
+}
+
+async function controlNewRequest() {
   try {
   } catch (err) {
     console.log(err);
   }
-};
+}
 
-const init = async () => {
+function init() {
   console.log("Start Program Holla!");
-  await model.loadRequests();
-  requestsView.addHandlerRender(
-    requestsView.renderRequests(model.state.requsets)
-  );
-};
+  requestsView.addHandlerRender(controlLoadRequests);
+  requestsView.addHandlerUpdateVote(controlUpdateVote);
+}
 
 init();
