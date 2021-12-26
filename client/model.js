@@ -1,5 +1,5 @@
 import { API_URL } from "./config.js";
-import { getJson } from "./helper.js";
+import { getJson, diffInTime } from "./helper.js";
 
 export const state = {
   requsets: [],
@@ -15,6 +15,7 @@ export const state = {
     details: { value: "", isVaild: false },
     expectedResults: { value: "", isVaild: false },
   },
+  // orderedByVote
 };
 
 export const loadRequests = async () => {
@@ -53,4 +54,18 @@ export const sendRequest = async (enteredData) => {
     { "Content-Type": " application/json" }
   );
   state.requsets.unshift(newRequest);
+};
+
+//
+
+export const orderRequests = (orderedBy) => {
+  if (orderedBy === "newest") {
+    state.requsets.sort((b, a) => {
+      return diffInTime(a.submit_date, b.submit_date);
+    });
+  } else if (orderedBy === "most_voted") {
+    state.requsets.sort((b, a) => {
+      return a.votes.ups - a.votes.downs - (b.votes.ups - b.votes.downs);
+    });
+  }
 };
