@@ -2,9 +2,8 @@ class OrderSelectorView {
   _orderSelector = document.querySelector("#ordered_by");
 
   addHandlerOrderRequests(handler) {
-    this._orderSelector.addEventListener("change", (e) => {
-      console.log(this._orderSelector.value);
-      handler(this._orderSelector.value);
+    this._orderSelector.addEventListener("change", function excuteHandler(e) {
+      handler(e.target.value);
     });
   }
 }
