@@ -1,9 +1,4 @@
-export const getJson = async (
-  url,
-  method = "GET",
-  body = null,
-  headers = {}
-) => {
+export const AJAX = async (url, method = "GET", body = null, headers = {}) => {
   const res = await fetch(url, {
     method,
     body,

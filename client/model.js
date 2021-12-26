@@ -1,5 +1,5 @@
 import { API_URL } from "./config.js";
-import { getJson, diffInTime } from "./helper.js";
+import { AJAX, diffInTime } from "./helper.js";
 
 export const state = {
   requsets: [],
@@ -15,12 +15,12 @@ export const state = {
     details: { value: "", isVaild: false },
     expectedResults: { value: "", isVaild: false },
   },
-  // orderedByVote
+  sorted: false,
 };
 
 export const loadRequests = async () => {
   try {
-    const data = await getJson(`${API_URL}/video-request`);
+    const data = await AJAX(`${API_URL}/video-request`);
     state.requsets = data;
   } catch (err) {
     console.error(`${err} 💥💥💥💥`);
@@ -28,7 +28,7 @@ export const loadRequests = async () => {
 };
 
 export const updateVote = async (id, vote_type) => {
-  const updatedRequest = await getJson(
+  const updatedRequest = await AJAX(
     `${API_URL}/video-request/vote`,
     "PUT",
     JSON.stringify({
@@ -47,25 +47,42 @@ export const updateVote = async (id, vote_type) => {
 };
 
 export const sendRequest = async (enteredData) => {
-  const newRequest = await getJson(
-    `${API_URL}/video-request`,
-    "POST",
-    JSON.stringify(enteredData),
-    { "Content-Type": " application/json" }
-  );
-  state.requsets.unshift(newRequest);
+  try {
+    const newRequest = await AJAX(
+      `${API_URL}/video-request`,
+      "POST",
+      JSON.stringify(enteredData),
+      { "Content-Type": " application/json" }
+    );
+    if (state.sorted) {
+      const startIndex = state.requsets.findIndex(
+        (req) => req.votes.ups - req.votes.downs === 0
+      );
+
+      state.requsets.splice(startIndex, 0, newRequest);
+    } else state.requsets.unshift(newRequest);
+  } catch (err) {
+    console.error(`${err} 💥💥💥💥`);
+  }
 };
 
-//
-
-export const orderRequests = (orderedBy) => {
+export function orderRequests(orderedBy) {
+  // Sort by submit date Asc
   if (orderedBy === "newest") {
     state.requsets.sort((b, a) => {
       return diffInTime(a.submit_date, b.submit_date);
     });
-  } else if (orderedBy === "most_voted") {
+
+    // Return the default sort state
+    state.sorted = false;
+  }
+  // Sort by most votes
+  else if (orderedBy === "most_voted") {
     state.requsets.sort((b, a) => {
       return a.votes.ups - a.votes.downs - (b.votes.ups - b.votes.downs);
     });
+
+    // Raise the sorted flag
+    state.sorted = true;
   }
-};
+}
