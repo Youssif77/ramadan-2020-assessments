@@ -2,6 +2,7 @@
 
 import * as model from "./model.js";
 import requestsView from "./views/requestsView.js";
+import orderSelectorView from "./views/orderSelectorView.js";
 
 async function controlLoadRequests() {
   await model.loadRequests();
@@ -21,11 +22,14 @@ async function controlNewRequest() {
     console.log(err);
   }
 }
+//
+function controlOrderRequests() {}
 
 function init() {
   console.log("Start Program Holla!");
   requestsView.addHandlerRender(controlLoadRequests);
   requestsView.addHandlerUpdateVote(controlUpdateVote);
+  orderSelectorView.addHandlerOrderRequests(controlOrderRequests);
 }
 
 init();
