@@ -1,19 +1,18 @@
 import { API_URL } from "./config.js";
-import { AJAX, diffInTime } from "./helper.js";
+import { validateEmail, AJAX, diffInTime } from "./helper.js";
 
 export const state = {
   requsets: [],
-  search: {
-    query: "",
-    searchedRequsets: [],
-  },
+
+  searchQuery: "",
+
   formInputs: {
-    userName: { value: "", isVaild: false },
-    email: { value: "", isVaild: false },
-    topic: { value: "", isVaild: false },
-    targetLevel: { value: "Beginner", isVaild: false },
-    details: { value: "", isVaild: false },
-    expectedResults: { value: "", isVaild: false },
+    author_name: { value: "", validate: [false, ""] },
+    author_email: { value: "", validate: [false, ""] },
+    topic_details: { value: "", validate: [false, ""] },
+    topic_title: { value: "", validate: [false, ""] },
+    target_level: { value: "Beginner", validate: [true, ""] },
+    expected_result: { value: "", validate: [true, ""] },
   },
   sorted: false,
 };
@@ -84,5 +83,45 @@ export function orderRequests(orderedBy) {
 
     // Raise the sorted flag
     state.sorted = true;
+  }
+}
+
+export function searchRequests(enteredValue) {
+  state.searchQuery = enteredValue;
+  if (state.searchQuery) {
+    return state.requsets.filter((request) => {
+      if (request.topic_title.includes(state.searchQuery)) {
+        return request;
+      }
+    });
+  } else {
+    return state.requsets;
+  }
+}
+export function validateInput(value, info) {
+  let [isValide, msg] = state.formInputs[info.name].validate;
+
+  state.formInputs[info.name].value = value;
+
+  if (info.required && !info.checkValidity) {
+    isValide = false;
+    msg = ` this ${info.name.toUpperCase()} is required`;
+    if (
+      info.type === "email" &&
+      !validateEmail(value)
+      // !info.checkValidity &&
+      // info.value
+    ) {
+      console.log("s");
+      isValide = false;
+    }
+
+    // if (info.name == "topic_title" && info.value.length == 100) {
+    // isValide = false;
+    // }
+  } else {
+    // console.log(state.formInputs);
+    isValide = true;
+    console.log("check validity");
   }
 }
