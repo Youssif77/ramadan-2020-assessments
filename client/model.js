@@ -99,29 +99,23 @@ export function searchRequests(enteredValue) {
   }
 }
 export function validateInput(value, info) {
-  let [isValide, msg] = state.formInputs[info.name].validate;
-
+  let { validate } = state.formInputs[info.name];
   state.formInputs[info.name].value = value;
 
-  if (info.required && !info.checkValidity) {
-    isValide = false;
-    msg = ` this ${info.name.toUpperCase()} is required`;
-    if (
-      info.type === "email" &&
-      !validateEmail(value)
-      // !info.checkValidity &&
-      // info.value
-    ) {
-      console.log("s");
-      isValide = false;
-    }
-
-    // if (info.name == "topic_title" && info.value.length == 100) {
-    // isValide = false;
-    // }
+  if (info.type === "email" && !validateEmail(value)) {
+    console.log("ENTER EMAIL VAILDATION");
+    validate[0] = false;
+    validate[1] = value ? `Please enter vaild email` : "This input is required";
+  } else if (info.maxLength != -1 && value.length == 100) {
+    validate[0] = false;
+    validate[1] = value
+      ? `Maximum length is 100 char`
+      : "This input is required";
+  } else if (info.required && !value) {
+    validate[0] = false;
+    validate[1] = `This input is required`;
   } else {
-    // console.log(state.formInputs);
-    isValide = true;
-    console.log("check validity");
+    validate[0] = true;
+    validate[1] = ``;
   }
 }

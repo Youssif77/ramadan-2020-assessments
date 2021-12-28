@@ -1,21 +1,21 @@
 class SearchInputView {
   _searchInput = document.querySelector(".search");
-  msgContainer = document.querySelector(".Msg");
+  _msgContainer = document.querySelector(".msg");
 
   addHendlerSearchRequests(handler) {
     this._searchInput.addEventListener("input", (e) => {
       handler(e.target.value);
       if (!e.target.value) {
-        this.msgContainer.innerHTML = "";
+        this._msgContainer.innerHTML = "";
       }
     });
   }
 
   rederMsg(requestsNumber) {
     if (requestsNumber == 0) {
-      this.msgContainer.innerHTML = "no requests matchs";
+      this._msgContainer.innerHTML = "no requests matchs";
     } else {
-      this.msgContainer.innerHTML = `${requestsNumber} requests `;
+      this._msgContainer.innerHTML = `${requestsNumber} requests `;
     }
   }
 }

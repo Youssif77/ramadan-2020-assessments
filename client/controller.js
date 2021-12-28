@@ -38,16 +38,16 @@ function controlSearchRequests(searchValue) {
 }
 
 function controlValidateInput(e) {
-  // console.log(e.target.checkValidity());
   const inputValue = e.target.value;
   const inputInfo = {
     type: e.target.type,
     name: e.target.name,
     checkValidity: e.target.checkValidity(),
     required: e.target.required,
+    maxLength: e.target.maxLength,
   };
   model.validateInput(inputValue, inputInfo);
-  console.log(model.state.formInputs.author_email);
+  console.log(model.state.formInputs);
 }
 
 function init() {

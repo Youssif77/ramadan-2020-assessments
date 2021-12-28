@@ -9,9 +9,7 @@ export const AJAX = async (url, method = "GET", body = null, headers = {}) => {
 
 export function validateEmail(email) {
   var re = /\S+@\S+\.\S+/;
-  const x = re.test(email);
-  console.log(x);
-  return x;
+  return re.test(email);
 }
 
 export const diffInTime = (firstDate, secondDate) => {

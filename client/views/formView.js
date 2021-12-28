@@ -1,6 +1,7 @@
 class formView {
   _newRequestForm = document.querySelector("form");
   _formInputs = document.querySelectorAll(".form-control");
+
   addHandlerNewRequest(handler) {
     this._newRequestForm.addEventListener("submit", function (e) {
       e.preventDefault();
