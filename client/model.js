@@ -15,6 +15,13 @@ export const state = {
     expected_result: { value: "", validate: [true, ""] },
   },
   sorted: false,
+  user: {
+    isLogged: false,
+    info: {
+      email: "",
+      name: "",
+    },
+  },
 };
 
 export const loadRequests = async () => {
@@ -119,3 +126,18 @@ export function validateInput(value, info) {
     validate[1] = ``;
   }
 }
+export const login = async (loginData) => {
+  const loginBody = JSON.stringify({
+    author_name: loginData.name,
+    author_email: loginData.email,
+  });
+  console.log(typeof loginBody);
+  try {
+    const data = await AJAX(`${API_URL}/users/login`, "POST", loginBody, {
+      "Content-Type": " application/json",
+    });
+    console.log(data);
+  } catch (err) {
+    alert(err);
+  }
+};

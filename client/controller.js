@@ -5,7 +5,7 @@ import requestsView from "./views/requestsView.js";
 import orderSelectorView from "./views/orderSelectorView.js";
 import formView from "./views/formView.js";
 import searchInputView from "./views/SearchInputView.js";
-
+import loginVeiw from "./views/loginVeiw.js";
 async function controlLoadRequests() {
   await model.loadRequests();
   requestsView.renderRequests(model.state.requsets);
@@ -47,9 +47,11 @@ function controlValidateInput(e) {
     maxLength: e.target.maxLength,
   };
   model.validateInput(inputValue, inputInfo);
-  console.log(model.state.formInputs);
+  formView.renderValidationMsg(model.state.formInputs[e.target.name], e.target);
 }
-
+async function controlLogin(loginData) {
+  await model.login(loginData);
+}
 function init() {
   console.log("Start Program Holla!");
   requestsView.addHandlerRender(controlLoadRequests);
@@ -58,6 +60,7 @@ function init() {
   formView.addHandlerValidateInput(controlValidateInput);
   orderSelectorView.addHandlerOrderRequests(controlOrderRequests);
   searchInputView.addHendlerSearchRequests(controlSearchRequests);
+  loginVeiw.addHandlerLogin(controlLogin);
 }
 
 init();

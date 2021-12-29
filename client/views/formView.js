@@ -1,5 +1,5 @@
 class formView {
-  _newRequestForm = document.querySelector("form");
+  _newRequestForm = document.querySelector(".requists_form");
   _formInputs = document.querySelectorAll(".form-control");
 
   addHandlerNewRequest(handler) {
@@ -15,6 +15,9 @@ class formView {
     this._formInputs.forEach((formInput) => {
       formInput.addEventListener("input", handler);
     });
+  }
+  renderValidationMsg(inputState, input) {
+    input.nextElementSibling.innerHTML = inputState.validate[1];
   }
 }
 
