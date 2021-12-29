@@ -4,6 +4,7 @@ export const AJAX = async (url, method = "GET", body = null, headers = {}) => {
     body,
     headers,
   });
+  console.log(res);
   return await res.json();
 };
 

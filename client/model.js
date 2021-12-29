@@ -126,6 +126,7 @@ export function validateInput(value, info) {
     validate[1] = ``;
   }
 }
+
 export const login = async (loginData) => {
   const loginBody = JSON.stringify({
     author_name: loginData.name,

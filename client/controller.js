@@ -12,7 +12,11 @@ async function controlLoadRequests() {
 }
 
 async function controlUpdateVote(id, voteType) {
-  await model.updateVote(id, voteType);
+  if (model.state.user.isLogged) {
+    await model.updateVote(id, voteType);
+  } else {
+    // TODO: redirect to login page
+  }
 
   // render updated vote requests
   requestsView.renderRequests(model.state.requsets);
