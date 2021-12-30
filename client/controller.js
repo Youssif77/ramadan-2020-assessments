@@ -14,10 +14,9 @@ async function controlLoadRequests() {
 async function controlUpdateVote(id, voteType) {
   console.log(model.state.user);
   if (model.state.user.isLogged) {
-    await model.updateVote(id, voteType);
+    await model.updateVote(id, voteType, model.state.user.info.id);
   } else {
     loginVeiw.showLoginPage();
-    // TODO: redirect to login page
   }
 
   // render updated vote requests
@@ -37,6 +36,7 @@ function controlOrderRequests(orderBy) {
   model.orderRequests(orderBy);
   requestsView.renderRequests(model.state.requsets);
 }
+
 function controlSearchRequests(searchValue) {
   const searchedRequests = model.searchRequests(searchValue);
   searchInputView.rederMsg(searchedRequests.length);
@@ -55,9 +55,11 @@ function controlValidateInput(e) {
   model.validateInput(inputValue, inputInfo);
   formView.renderValidationMsg(model.state.formInputs[e.target.name], e.target);
 }
+
 async function controlLogin(loginData) {
   await model.login(loginData);
 }
+
 function init() {
   console.log("Start Program Holla!");
   requestsView.addHandlerRender(controlLoadRequests);

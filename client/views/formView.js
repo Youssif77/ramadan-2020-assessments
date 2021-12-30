@@ -16,6 +16,7 @@ class formView {
       formInput.addEventListener("input", handler);
     });
   }
+
   renderValidationMsg(inputState, input) {
     input.nextElementSibling.innerHTML = inputState.validate[1];
   }

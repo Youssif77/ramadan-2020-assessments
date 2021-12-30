@@ -18,6 +18,7 @@ export const state = {
   user: {
     isLogged: false,
     info: {
+      id: "",
       email: "",
       name: "",
     },
@@ -33,13 +34,14 @@ export const loadRequests = async () => {
   }
 };
 
-export const updateVote = async (id, vote_type) => {
+export const updateVote = async (id, vote_type, userId) => {
   const updatedRequest = await AJAX(
     `${API_URL}/video-request/vote`,
     "PUT",
     JSON.stringify({
       id,
       vote_type,
+      userId,
     }),
     { "Content-Type": " application/json" }
   );
@@ -136,9 +138,11 @@ export const login = async (loginData) => {
     const data = await AJAX(`${API_URL}/users/login`, "POST", loginBody, {
       "Content-Type": " application/json",
     });
+    console.log(data);
+    state.user.isLogged = true;
     state.user.info.name = data.author_name;
     state.user.info.email = data.author_email;
-    state.user.isLogged = true;
+    state.user.info.id = data._id;
   } catch (err) {
     console.log(err);
   }
