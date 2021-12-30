@@ -45,8 +45,12 @@ app.post("/users/login", async (req, res, next) => {
 });
 
 app.put("/video-request/vote", async (req, res, next) => {
-  const { id, vote_type } = req.body;
-  const response = await VideoRequestData.updateVoteForRequest(id, vote_type);
+  const { id, vote_type, userId } = req.body;
+  const response = await VideoRequestData.updateVoteForRequest(
+    id,
+    vote_type,
+    userId
+  );
   res.send(response);
   next();
 });
