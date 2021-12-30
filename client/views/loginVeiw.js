@@ -11,5 +11,9 @@ class LoginView {
       this._loginForm.closest(".login").classList.add("d-none");
     });
   }
+  showLoginPage() {
+    this._app.classList.add("d-none");
+    this._loginForm.closest(".login").classList.remove("d-none");
+  }
 }
 export default new LoginView();
