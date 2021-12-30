@@ -132,13 +132,14 @@ export const login = async (loginData) => {
     author_name: loginData.name,
     author_email: loginData.email,
   });
-  console.log(typeof loginBody);
   try {
     const data = await AJAX(`${API_URL}/users/login`, "POST", loginBody, {
       "Content-Type": " application/json",
     });
-    console.log(data);
+    state.user.info.name = data.author_name;
+    state.user.info.email = data.author_email;
+    state.user.isLogged = true;
   } catch (err) {
-    alert(err);
+    console.log(err);
   }
 };
