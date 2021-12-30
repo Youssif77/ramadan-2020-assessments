@@ -1,4 +1,3 @@
-const { state } = require("../../client/model");
 var VideoRequest = require("./../models/video-requests.model");
 
 module.exports = {
