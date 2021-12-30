@@ -12,9 +12,11 @@ async function controlLoadRequests() {
 }
 
 async function controlUpdateVote(id, voteType) {
+  console.log(model.state.user);
   if (model.state.user.isLogged) {
     await model.updateVote(id, voteType);
   } else {
+    loginVeiw.showLoginPage();
     // TODO: redirect to login page
   }
 
