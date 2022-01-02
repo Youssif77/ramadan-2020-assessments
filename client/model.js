@@ -35,6 +35,11 @@ export const loadRequests = async () => {
 };
 
 export const updateVote = async (id, vote_type, userId) => {
+  const currentRequest = state.requsets.find((requset) => {
+    return requset._id === id;
+  });
+  if (currentRequest.votes.users.includes(userId)) return;
+  currentRequest.votes.users.push(userId);
   const updatedRequest = await AJAX(
     `${API_URL}/video-request/vote`,
     "PUT",
@@ -46,12 +51,8 @@ export const updateVote = async (id, vote_type, userId) => {
     { "Content-Type": " application/json" }
   );
 
-  const oldRequest = state.requsets.find((requset) => {
-    return requset._id === updatedRequest._id;
-  });
-
-  oldRequest.votes.ups = updatedRequest.votes.ups;
-  oldRequest.votes.downs = updatedRequest.votes.downs;
+  currentRequest.votes.ups = updatedRequest.votes.ups;
+  currentRequest.votes.downs = updatedRequest.votes.downs;
 };
 
 export const sendRequest = async (enteredData) => {
