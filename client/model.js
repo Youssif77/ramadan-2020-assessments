@@ -21,6 +21,7 @@ export const state = {
       id: "",
       email: "",
       name: "",
+      role: "",
     },
   },
 };
@@ -144,6 +145,20 @@ export const login = async (loginData) => {
     state.user.info.name = data.author_name;
     state.user.info.email = data.author_email;
     state.user.info.id = data._id;
+    state.user.info.role = "admin";
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const deleteRequest = async (id) => {
+  try {
+    await AJAX(`${API_URL}/video-request`, "DELETE", JSON.stringify({ id }), {
+      "Content-Type": " application/json",
+    });
+    const requestIndex = state.requsets.findIndex(
+      (element) => element._id === id
+    );
+    state.requsets.splice(requestIndex, 1);
   } catch (err) {
     console.log(err);
   }

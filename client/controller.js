@@ -8,7 +8,7 @@ import searchInputView from "./views/SearchInputView.js";
 import loginVeiw from "./views/loginVeiw.js";
 async function controlLoadRequests() {
   await model.loadRequests();
-  requestsView.renderRequests(model.state.requsets);
+  requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
 }
 
 async function controlUpdateVote(id, voteType) {
@@ -20,13 +20,16 @@ async function controlUpdateVote(id, voteType) {
   }
 
   // render updated vote requests
-  requestsView.renderRequests(model.state.requsets);
+  requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
 }
 
 async function controlNewRequest(data) {
   try {
     await model.sendRequest(data);
-    requestsView.renderRequests(model.state.requsets);
+    requestsView.renderRequests(
+      model.state.requsets,
+      model.state.user.info.role
+    );
   } catch (err) {
     console.log(err);
   }
@@ -34,13 +37,13 @@ async function controlNewRequest(data) {
 
 function controlOrderRequests(orderBy) {
   model.orderRequests(orderBy);
-  requestsView.renderRequests(model.state.requsets);
+  requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
 }
 
 function controlSearchRequests(searchValue) {
   const searchedRequests = model.searchRequests(searchValue);
   searchInputView.rederMsg(searchedRequests.length);
-  requestsView.renderRequests(searchedRequests);
+  requestsView.renderRequests(searchedRequests, model.state.user.info.role);
 }
 
 function controlValidateInput(e) {
@@ -58,8 +61,12 @@ function controlValidateInput(e) {
 
 async function controlLogin(loginData) {
   await model.login(loginData);
+  requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
 }
-
+async function controlDeleteRequest(id) {
+  await model.deleteRequest(id);
+  requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
+}
 function init() {
   console.log("Start Program Holla!");
   requestsView.addHandlerRender(controlLoadRequests);
@@ -69,6 +76,7 @@ function init() {
   orderSelectorView.addHandlerOrderRequests(controlOrderRequests);
   searchInputView.addHendlerSearchRequests(controlSearchRequests);
   loginVeiw.addHandlerLogin(controlLogin);
+  requestsView.addHandlerDeleteRequest(controlDeleteRequest);
 }
 
 init();
