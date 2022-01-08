@@ -145,7 +145,7 @@ export const login = async (loginData) => {
     state.user.info.name = data.author_name;
     state.user.info.email = data.author_email;
     state.user.info.id = data._id;
-    state.user.info.role = "admin";
+    state.user.info.role = data.role;
   } catch (err) {
     console.log(err);
   }
@@ -161,5 +161,22 @@ export const deleteRequest = async (id) => {
     state.requsets.splice(requestIndex, 1);
   } catch (err) {
     console.log(err);
+  }
+};
+export const updateStatusRequest = async (id, status) => {
+  try {
+    const updatedRequest = await AJAX(
+      `${API_URL}/video-request`,
+      "PUT",
+      JSON.stringify({ id, status }),
+      {
+        "Content-Type": " application/json",
+      }
+    );
+    const request = state.requsets.find((element) => element._id === id);
+    request.status = updatedRequest.status;
+    console.log(updatedRequest);
+  } catch (err) {
+    alert(err);
   }
 };

@@ -28,13 +28,23 @@ class requsetsView {
       handler(id);
     });
   }
+  addHandlerUpdateRequestStatus(handler) {
+    const listOfRequests = document.querySelector("#listOfRequests");
 
-  renderRequests(data, role) {
-    console.log(role);
+    listOfRequests.addEventListener("change", function handleVote(e) {
+      if (!e.target.classList.contains("status")) return;
+      const requestElem = e.target.closest(".request");
+      const id = requestElem.dataset.id;
+      handler(id, e.target.value);
+    });
+  }
+  renderRequests(data, role, status) {
     let template = "";
     data.forEach((item) => {
-      template += `<div class='card mb-3 request' data-id=${item._id}>${
-        role === "admin"
+      template += `<div class='card mb-3 request' data-id=${item._id}>
+      <div class="d-flex justify-content-between w-100">
+      ${
+        false
           ? ` <svg
           
             xmlns='http://www.w3.org/2000/svg'
@@ -44,9 +54,23 @@ class requsetsView {
             class='m-2 bi bi-file-x-fill delete'
             viewBox='0 0 16 16'>
             <path class="delete" d='M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM6.854 6.146 8 7.293l1.146-1.147a.5.5 0 1 1 .708.708L8.707 8l1.147 1.146a.5.5 0 0 1-.708.708L8 8.707 6.854 9.854a.5.5 0 0 1-.708-.708L7.293 8 6.146 6.854a.5.5 0 1 1 .708-.708z' />
-          </svg>`
+          </svg> `
           : ""
       }
+     ${
+       //TODO role
+       false && status !== "done"
+         ? ` <div>
+         <select class="bg-dark text-light rounded p-1  m-2 status" style="width:100px">
+         <option selected disabled>status</option>
+                <option value="new">new</option>
+                <option value="planned">planned</option>
+                 <option value="done">done</option>
+              </select>
+            
+              </div>`
+         : ""
+     }</div>
           <div class='card-body d-flex justify-content-between flex-row'>
             <div class='d-flex flex-column'>
               <h3>${item.topic_title}</h3>
@@ -67,7 +91,7 @@ class requsetsView {
           </div>
           <div class='card-footer d-flex flex-row justify-content-between'>
             <div>
-              <span class='text-info'>NEW</span>
+              <span class='text-info'>${item.status.toUpperCase()}</span>
               &bullet; added by
               <strong>${item.author_name}</strong>
               on

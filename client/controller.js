@@ -67,6 +67,10 @@ async function controlDeleteRequest(id) {
   await model.deleteRequest(id);
   requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
 }
+async function controlUpdateStatusRequest(id, status) {
+  await model.updateStatusRequest(id, status);
+  requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
+}
 function init() {
   console.log("Start Program Holla!");
   requestsView.addHandlerRender(controlLoadRequests);
@@ -77,6 +81,7 @@ function init() {
   searchInputView.addHendlerSearchRequests(controlSearchRequests);
   loginVeiw.addHandlerLogin(controlLogin);
   requestsView.addHandlerDeleteRequest(controlDeleteRequest);
+  requestsView.addHandlerUpdateRequestStatus(controlUpdateStatusRequest);
 }
 
 init();
