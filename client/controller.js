@@ -12,7 +12,6 @@ async function controlLoadRequests() {
 }
 
 async function controlUpdateVote(id, voteType) {
-  console.log(model.state.user);
   if (model.state.user.isLogged) {
     await model.updateVote(id, voteType, model.state.user.info.id);
   } else {
@@ -67,8 +66,8 @@ async function controlDeleteRequest(id) {
   await model.deleteRequest(id);
   requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
 }
-async function controlUpdateStatusRequest(id, status) {
-  await model.updateStatusRequest(id, status);
+async function controlUpdateStatusRequest(id, status, resVideo) {
+  await model.updateStatusRequest(id, status, resVideo);
   requestsView.renderRequests(model.state.requsets, model.state.user.info.role);
 }
 function init() {

@@ -31,20 +31,23 @@ class requsetsView {
   addHandlerUpdateRequestStatus(handler) {
     const listOfRequests = document.querySelector("#listOfRequests");
 
-    listOfRequests.addEventListener("change", function handleVote(e) {
-      if (!e.target.classList.contains("status")) return;
+    listOfRequests.addEventListener("click", function handleVote(e) {
+      e.preventDefault();
+      if (!e.target.classList.contains("update_request")) return;
       const requestElem = e.target.closest(".request");
+      const status = requestElem.querySelector(".status");
       const id = requestElem.dataset.id;
-      handler(id, e.target.value);
+      const videoUrl = requestElem.querySelector(".resVideo");
+      handler(id, status.value, videoUrl.value);
     });
   }
-  renderRequests(data, role, status) {
+  renderRequests(data, role) {
     let template = "";
     data.forEach((item) => {
       template += `<div class='card mb-3 request' data-id=${item._id}>
       <div class="d-flex justify-content-between w-100">
       ${
-        false
+        role === "admin"
           ? ` <svg
           
             xmlns='http://www.w3.org/2000/svg'
@@ -58,16 +61,16 @@ class requsetsView {
           : ""
       }
      ${
-       //TODO role
-       false && status !== "done"
-         ? ` <div>
+       role === "admin" && data.status !== "done"
+         ? ` <div>  <form>
          <select class="bg-dark text-light rounded p-1  m-2 status" style="width:100px">
-         <option selected disabled>status</option>
+         <option selected disabled hidden value=${item.status} >status</option>
                 <option value="new">new</option>
                 <option value="planned">planned</option>
                  <option value="done">done</option>
               </select>
-            
+          <input type="text" class=" rounded resVideo">
+          <button class="btn btn-dark text-light p-1  m-2 update_request"> submit</button></form>
               </div>`
          : ""
      }</div>
@@ -80,6 +83,15 @@ class requsetsView {
               item.expected_result &&
               `<strong>Expected results:</strong>${item.expected_result} </p>
             </div>`
+            }
+
+
+            ${
+              item.video_ref.link
+                ? `<img class = "w-25" src="https://img.youtube.com/vi/${
+                    item.video_ref.link.split("=")[1]
+                  }/0.jpg"/>`
+                : ""
             }
             <div class='d-flex flex-column text-center'>
               <a class='btn btn-link vote_up' data-voteType="ups">🔺</a>

@@ -114,7 +114,6 @@ export function validateInput(value, info) {
   state.formInputs[info.name].value = value;
 
   if (info.type === "email" && !validateEmail(value)) {
-    console.log("ENTER EMAIL VAILDATION");
     validate[0] = false;
     validate[1] = value ? `Please enter vaild email` : "This input is required";
   } else if (info.maxLength != -1 && value.length == 100) {
@@ -140,7 +139,6 @@ export const login = async (loginData) => {
     const data = await AJAX(`${API_URL}/users/login`, "POST", loginBody, {
       "Content-Type": " application/json",
     });
-    console.log(data);
     state.user.isLogged = true;
     state.user.info.name = data.author_name;
     state.user.info.email = data.author_email;
@@ -163,19 +161,19 @@ export const deleteRequest = async (id) => {
     console.log(err);
   }
 };
-export const updateStatusRequest = async (id, status) => {
+export const updateStatusRequest = async (id, status, resVideo) => {
   try {
     const updatedRequest = await AJAX(
       `${API_URL}/video-request`,
       "PUT",
-      JSON.stringify({ id, status }),
+      JSON.stringify({ id, status, resVideo }),
       {
         "Content-Type": " application/json",
       }
     );
     const request = state.requsets.find((element) => element._id === id);
     request.status = updatedRequest.status;
-    console.log(updatedRequest);
+    request.video_ref = updatedRequest.video_ref;
   } catch (err) {
     alert(err);
   }
